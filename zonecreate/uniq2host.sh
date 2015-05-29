@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #****************************************************************#
 # ScriptName: uniq2host.sh
 # Author: liujmsunits@hotmail.com

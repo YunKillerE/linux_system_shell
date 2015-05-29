@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #****************************************************************#
 # ScriptName: spilt.sh
 # Author: liujmsunits@hotmail.com

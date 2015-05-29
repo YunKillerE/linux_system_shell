@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #****************************************************************#
 # ScriptName: createzone.sh
 # Author: liujmsunits@hotmail.com

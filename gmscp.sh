@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Function: scp config file to each <grouphost>
 # Usage: gmscp.sh <grouphost> local_full_path_file remote_full_path_file
