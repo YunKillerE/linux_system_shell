@@ -1,5 +1,7 @@
 autossh.sh	免交互登录脚本  
 
+autossh.sh	免交互登录脚本  
+
 carp_stat.sh  系统状态检查
 
 check.sh  在互信的环境中批量远程命令执行
