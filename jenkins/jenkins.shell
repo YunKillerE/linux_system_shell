@@ -4,10 +4,13 @@
 # Author: liujmsunits@hotmail.com
 # Create Date: 2015-06-27 16:45
 # Modify Author: liujmsunits@hotmail.com
-# Modify Date: 2015-06-28 09:36
+# Modify Date: 2015-06-28 11:49
 # Function: 
 #***************************************************************#
 source /etc/profile
+
+echo "必须要要先配置sudoer文件，否则会导致sorry, you must have a tty to run sudo报错"
+echo "更改/etc/sudoer文件，注释Defaults    requiretty行"
 
 git pull origin `git branch -a |tail -1 |awk -F'/' '{print $NF}'`
 
