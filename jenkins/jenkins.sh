@@ -4,7 +4,7 @@
 # Author: liujmsunits@hotmail.com
 # Create Date: 2015-06-27 16:45
 # Modify Author: liujmsunits@hotmail.com
-# Modify Date: 2015-06-27 16:46
+# Modify Date: 2015-06-28 09:36
 # Function: 
 #***************************************************************#
 source /etc/profile
@@ -15,44 +15,65 @@ mvn clean package
 
 wpath=/home/goujia/project/goujia/web/website
 
+#wpath="/home/goujia/project/web/website"
+
+#jpath="/home/goujia/soft/jdk1.7.0_55/bin:$PATH"
+jpath="/usr/local/jdk1.8.0_45/bin:$PATH"
+jhost="web1"
+xshell="xsed.sh"
+
+aconsole="application.properties.console.test"
+#aconsole="application.properties.console"
+aweb="application.properties.web.test"
+#aweb="application.properties.web"
+async="application.properties.sync.test"
+#async="application.properties.sync"
+
+
 #function
 function sshweb(){
-	#$1 host $2 command 
-    ssh web1 "$1"
+#$1 host $2 command 
+    ssh $jhost "$1"
 }
 
 function jettyrestart(){
-	ssh web1 "export PATH=/usr/local/jdk1.8.0_45/bin:$PATH && cd $1 && sudo -u goujia ./bin/jetty.sh stop && sleep 2 && sudo -u goujia ./bin/jetty.sh start && sleep 10"
+	ssh $jhost "export PATH=$jpath && cd $1 && sudo -u goujia ./bin/jetty.sh stop && sleep 2 && sudo -u goujia ./bin/jetty.sh start && sleep 10"
 }
 
 function taillog(){
-	ssh web1 "tail $wpath/bin/$1/logs/*.log"
+	ssh $jhost "tail $wpath/bin/$1/logs/*.log"
 }
 
 #backup && scp all file to web  && change the file user
-#sshweb "rm -rf $wpath/website.bak && mv $wpath/website $wpath/website.bak && mkdir $wpath/website"
-scp -rp * web1:$wpath/website/
+sshweb "rm -rf $wpath/website.bak && if [ -a $wpath/website ];then : ;else mkdir $wpath/website;fi && mv $wpath/website $wpath/website.bak && mkdir $wpath/website"
+scp -rp * $jhost:$wpath/website/
+scp -rp .git $jhost:$wpath/website/
 sshweb "chown -R goujia:goujia $wpath/website/"
 
 #copy application.properties file to console
-sshweb "cp -Rf $wpath/bin/application.properties $wpath/website/website-console/target/website-console-0.0.1-SNAPSHOT/WEB-INF/classes/application.properties"
-sshweb "cp -Rf $wpath/bin/application.properties $wpath/website/website-console/target/classes/application.properties"
+sshweb "cp -Rf $wpath/website/website-config/$aconsole $wpath/website/website-console/target/website-console-0.0.1-SNAPSHOT/WEB-INF/classes/application.properties"
 
 #copy application.properties file to web
-sshweb "cp -Rf $wpath/bin/application1.properties $wpath/website/website-web/target/website-web-0.0.1-SNAPSHOT/WEB-INF/classes/application.properties"
+sshweb "cp -Rf $wpath/website/website-config/$aweb $wpath/website/website-web/target/website-web-0.0.1-SNAPSHOT/WEB-INF/classes/application.properties"
+
+#copy application.properties file to sync
+sshweb "cp -Rf $wpath/website/website-config/$async $wpath/website/website-sync/target/website-sync-0.0.1-SNAPSHOT/WEB-INF/classes/application.properties"
 
 #change ueidt
 #sshweb "sed -i 's/PATH_CONTEXT="\/web"/PATH_CONTEXT="http:\/\/t_website.goujiawang.com"/g' $wpath/website/website-console/target/website-console-0.0.1-SNAPSHOT/source/sui/library/ueditor/ueditor.config.js"
-sshweb "/bin/sh $wpath/bin/sed.sh"
+sshweb "/bin/sh $wpath/website/website-config/$xshell"
 
 #clear jetty log
 sshweb "rm -rf $wpath/bin/jetty/logs/*"
 sshweb "rm -rf $wpath/bin/jettyweb/logs/*"
+sshweb "rm -rf $wpath/bin/jettysync/logs/*"
 
 #jetty restart 
 jettyrestart $wpath/bin/jetty/ &
 sleep 20
 jettyrestart $wpath/bin/jettyweb/ &
+sleep 20
+jettyrestart $wpath/bin/jettysync/ &
 sleep 20
 
 #tail log
@@ -60,5 +81,7 @@ sleep 20
 taillog jetty
 sleep 20
 taillog jettyweb
+sleep 20
+taillog jettysync
 
 sleep 3
