@@ -15,4 +15,8 @@ gm.sh  批量远程命令执行
 spilt.sh 分割字符串
 
 
+<<<<<<< HEAD
 xxxxxxxxxxxxxxxx
+=======
+aaaaaaaaaaaaaaaaaa
+>>>>>>> 7052a87853224c8b50523d7a17f847b69a1142cd
