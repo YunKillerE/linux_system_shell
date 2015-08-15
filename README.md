@@ -11,3 +11,6 @@ gmscp.sh  批量文件拷贝
 gm.sh  批量远程命令执行
 
 spilt.sh 分割字符串
+
+
+xxxxxxxxxxxxxxxx
