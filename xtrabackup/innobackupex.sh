@@ -27,7 +27,7 @@ mysqld_stop="service mysqld stop"
 #mysql用户
 mysql_user="root"
 #mysql密码
-mysql_passwd="jkgj2015_T@ST"
+mysql_passwd="xxxxxxx"
 #mysql默认配置文件
 default_file="/etc/my.cnf"
 #备份时使用的内存，数据库在G级别以上可以加快备份速度
