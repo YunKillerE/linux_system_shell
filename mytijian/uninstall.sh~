@@ -1,0 +1,42 @@
+#!/bin/bash
+#****************************************************************#
+# ScriptName: uninstall.sh
+# Author: 云尘(jimmy)
+# Create Date: 2015-12-22 19:36
+# Modify Author: liujmsunits@hotmail.com
+# Modify Date: 2015-12-22 19:36
+# Function: 
+#***************************************************************#
+Uninstall_Tomcat(){
+  echo "begin uninstall tomcat...."
+  PID=`ps -ef|grep tomcat | grep -v grep | awk '{print $2}'`
+  echo $PID
+  [ ! -z $PID ]&&kill -9 $PID
+  rm -rf /opt/tomcat
+  rm -rf /opt/apache-tomcat-8.0.26
+}
+
+Uninstall_Jdk() {
+  echo "begin uninstall jdk......"
+  rm -rf /usr/local/jdk
+  rm -rf /usr/local/jdk1.8.0_45
+  sed -i /'export JAVA_HOME='/d /etc/profile
+  sed -i "s#export\ PATH=\$JAVA_HOME/bin:#export\ PATH=#g" /etc/profile
+  sed -i /'export CLASSPATH=.:$JAVA_HOME'/d /etc/profile
+}
+
+Uninstall_Mediator() {
+  rm -rf /tmp/mediator-agent
+  mv /opt/apache-tomcat-8.0.26/webapps/mediator-agent /tmp
+}
+
+if [ X$1 = Xjdk ];then
+        Uninstall_Jdk
+elif [ X$1 = Xtomcat ];then
+        Uninstall_Tomcat
+elif [ X$1 = Xmediator ];then
+        Uninstall_Mediator
+else
+        Uninstall_Tomcat
+        Uninstall_Jdk
+fi

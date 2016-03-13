@@ -1,0 +1,13 @@
+path=`pwd`
+for i in `cat $path/u2g.list`
+do
+  arr=( `sed -n "1p" $path/u2g.list` )
+  id=${arr[0]}
+  name=${arr[1]}
+  sudo groupadd -g $id $name
+  sudo useradd -d /home/$name -u $id -g $id -s /bin/bash -G sudo -f $name
+  echo mytijian2015 | passwd --stdin $name
+  sudo mkdir /home/$name
+  sudo chown -R $name:$name /home/$name
+  sed -i "1 d" $path/u2g.list
+done
